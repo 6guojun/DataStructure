@@ -1,25 +1,33 @@
-//Include some library.
 #include "BinaryTree.h"
 
-//Function entrance.
 int main()
 {
-    /**
-     * Introduce:
-     * 1, Test input: AB#C##DE#F##G##
-    */
+    BiTree root;
 
-    //State a BiTree.
-    BiTree b;
+    //ABD#E###CFG###H##
+    //Pre order:ABDECFGH
+    //In order:DEBAGFCH
+    //Post order:EDBGFHCA
+    cout << "Input ebt:" << endl;
+    CreatBiTree_Rec(root);
 
-    //Recursion type.
-    //CreatBiTree_Recursion(b);
-    //ShowBiTree(b);
-    //cout << endl;
+    cout << "Pre order:" << endl;
+    DisplayBiTree_Stack(root, Pre);
+    cout << endl;
+    DisplayBiTree(root, Pre);
+    cout << endl;
 
-    //Ergodic type.
-    CreatBiTree_Ergodic(b);
-    ShowBiTree(b);
+    cout << "In order:" << endl;
+    DisplayBiTree_Stack(root, In);
+    cout << endl;
+    DisplayBiTree(root, In);
+    cout << endl;
+
+    cout << "Post order:" << endl;
+    DisplayBiTree_Stack(root, Post);
+    cout << endl;
+    DisplayBiTree(root, Post);
+    cout << endl;
 
     return 0;
 }

@@ -1,211 +1,122 @@
-/**
- * Introduce:
- * 1, We use char '#' to behalf the null node.
-*/
-
-//Include some library.
+//Include Liberary.
 #include <iostream>
-#include <string>
 #include <stack>
 
-//Imprt the namespace to this file.
+//Import the namespace.
 using namespace std;
 
-//Marco define.
-#define MAXSIZE 100
-
-//Define a struct to behalf the BinaryTree.
+//Define the binary tree struction.
 typedef struct BiNode
 {
+    char data;
     struct BiNode *LeftChild;
-    char Data;
     struct BiNode *RightChild;
 } BiNode, *BiTree;
 
-//Expanding the first ordered binary tree
-
-//Creat BiNode.
-//recieves:
-//  BiNode *&BN : The node u want to open.
-//  char c : The data u want to push in.
-//returns:
-// None
-void CreatBiNode(BiNode *&BN, char c)
+//Pre-order creat binary tree.
+void CreatBiTree_Rec(BiTree &root)
 {
-    //Open a new node.
-    BN = new BiNode;
-    cout << "Now we new a new node." << c << endl;
-
-    //Push the char into data.
-    BN->Data = c;
-    cout << "Push:\t" << BN->Data << endl;
-}
-
-//Generating binary tree by recursion.
-//recieves:
-//  BiTree &B : The node we should allocate memory space.
-//returns:
-//  None
-void CreatBiTree_Recursion(BiTree &B)
-{
-    //Get the new node tag.
-    char s;
-    cin >> s;
-
-    //Determine the char entered.
-    switch (s)
-    {
-    //The node will be null.
-    case '#':
-        B = NULL;
-        break;
-    //The node is not null.
-    default:
-        //Creat a new node which data is s.
-        CreatBiNode(B, s);
-
-        //Start recursion.
-        CreatBiTree_Recursion(B->LeftChild);
-        CreatBiTree_Recursion(B->RightChild);
-        break;
-    }
-}
-
-//Define a stack of BiTree.
-typedef struct BiTreeStack
-{
-    BiNode *Stack[MAXSIZE];
-    int Top;
-    int Size;
-} BiTreeStack;
-
-//Init a BiTreeStack.
-void InitBiTreeStack(BiTreeStack &BTS)
-{
-    BTS.Top = 0;
-    BTS.Size = MAXSIZE;
-}
-
-//Push to BiTreeStakc.
-void Push(BiTreeStack &BTS, BiNode *c)
-{
-    //Safety inspection.
-    if (BTS.Top >= BTS.Size)
-    {
-        cout << "The stakc is full" << endl;
-        return;
-    }
-
-    //Push in.
-    //Creat a new node which data is s
-    BTS.Stack[BTS.Top++] = c;
-    return;
-}
-
-//Pop from BiTreeStakc.
-void Pop(BiTreeStack &BTS, BiNode *&c)
-{
-    /*
-    //Safety inspection.
-    if (BTS.Top <= 0)
-    {
-        cout << "The stakc is full" << endl;
-        return;
-    }
-    */
-
-    //Pop it.
-    c = BTS.Stack[--BTS.Top];
-    return;
-}
-
-void CreatBiTree_Ergodic(BiTree &B)
-{
-    //Init a stack.
-    BiTreeStack BTS;
-    InitBiTreeStack(BTS);
-
-    //Define a pointer to do many thing.
-    B = new BiNode;
-    BiNode *pB = B;
-    pB->Data = getchar();
-    cout << "GET\t" << pB->Data << endl;
-    //Push in.
-    Push(BTS, pB);
-    cout << "PUSH\t" << pB->Data << endl;
-
-    //This condition is not well-defined.
+    //Get the input.
     char c;
-    bool isRight = false;
-    while (c = getchar())
+    cin >> c;
+
+    switch (c)
     {
-        switch (c)
-        {
-        case '#':
-            //If null stack then end.
-            if (BTS.Top == 0)
-            {
-                return;
-            }
-            //pB revoke.
-            Pop(BTS, pB);
-            cout << "POP\t" << pB->Data << endl;
-            isRight = true;
-            break;
-        default:
-            if (!isRight)
-            {
-                pB->LeftChild = new BiNode;
-                pB = pB->LeftChild;
-            }
-            else
-            {
-                pB->RightChild = new BiNode;
-                pB = pB->RightChild;
-            }
-
-            //Tag the pB.
-            pB->Data = c;
-            pB->LeftChild = pB->RightChild = NULL;
-            cout << "GET\t" << c << endl;
-
-            //Push in.
-            Push(BTS, pB);
-            cout << "PUSH\t" << pB->Data << endl;
-
-            cout << "DIR\t" << (isRight ? "Right" : "Left") << endl;
-
-            isRight = false;
-            break;
-        }
+    case '#':
+        root = NULL;
+        break;
+    default:
+        //Creat a new root.
+        root = new BiNode;
+        //Set its left child and right child be null.
+        root->LeftChild = root->RightChild = NULL;
+        //Set the data value.
+        root->data = c;
+        //Recursively generated child tree.
+        CreatBiTree_Rec(root->LeftChild);
+        CreatBiTree_Rec(root->RightChild);
+        break;
     }
-
-    return;
 }
 
-void ShowBiTree(BiTree &B)
+//Loop to creat binary tree.
+void CreatBiTree_Loop(BiTree &root)
 {
-    if (!B)
+    stack<BiTree> BiStack;
+
+    while (true)
+    {
+    }
+}
+
+enum Type
+{
+    Pre,
+    In,
+    Post
+};
+
+void DisplayBiTree(BiTree root, enum Type t)
+{
+    if (!root)
     {
         return;
     }
-    cout << B->Data << " ";
-    ShowBiTree(B->LeftChild);
-    ShowBiTree(B->RightChild);
-    return;
+    if (t == Pre)
+    {
+        cout << root->data;
+    }
+    DisplayBiTree(root->LeftChild, t);
+    if (t == In)
+    {
+        cout << root->data;
+    }
+    DisplayBiTree(root->RightChild, t);
+    if (t == Post)
+    {
+        cout << root->data;
+    }
 }
 
-void ShowTree_Ergodic(BiTree B)
+void DisplayBiTree_Stack(BiTree root, enum Type t)
 {
-    //Init a stack.
-    BiTreeStack BTS;
-    InitBiTreeStack(BTS);
+    stack<BiTree> BiStack;
+    BiNode *p = root, *temp = NULL;
+    do
+    {
+        if (!p)
+        {
+            p = BiStack.top();
+            if (t != Post)
+            {
+                BiStack.pop();
+            }
+            if (t == In)
+            {
+                cout << p->data;
+            }
+            if (t == Post)
+            {
+                if (!p->RightChild || p->RightChild == temp)
+                {
+                    cout << p->data;
+                    BiStack.pop();
+                    temp = p;
+                    p = NULL; //This is important.
+                    continue;
+                }
+            }
+            p = p->RightChild;
+            continue;
+        }
 
-    //左可左入栈，tag初始0
-    //无根出栈一，tag++
-    //tag==1，转向看入栈
-    //tag==2，出栈继续走
+        //cout << p->data;
+        BiStack.push(p);
+        if (t == Pre)
+        {
+            cout << p->data;
+        }
+        p = p->LeftChild;
 
-    //因为要维护一个Stack，所以我不写了
-    
+    } while (!BiStack.empty() || p);
 }
