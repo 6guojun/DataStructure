@@ -1,3 +1,5 @@
+#pragma once
+
 //Include Liberary.
 #include <iostream>
 #include <stack>
@@ -42,11 +44,58 @@ void CreatBiTree_Rec(BiTree &root)
 //Loop to creat binary tree.
 void CreatBiTree_Loop(BiTree &root)
 {
+    char c;
     stack<BiTree> BiStack;
 
-    while (true)
+    root = new BiNode;
+    BiNode *p = root;
+    bool IsRight = false;
+
+    //Define a pointer to do many thing.
+    p->data = getchar();
+    //Push in.
+    BiStack.push(p);
+
+    while (c = getchar())
     {
+        switch (c)
+        {
+        case '#':
+            //If null stack then end.
+            if (BiStack.empty())
+            {
+                return;
+            }
+            //pB revoke.
+            p = BiStack.top();
+            BiStack.pop();
+            IsRight = true;
+            break;
+        default:
+            if (IsRight)
+            {
+                p->RightChild = new BiNode;
+                p = p->RightChild;
+            }
+            else
+            {
+                p->LeftChild = new BiNode;
+                p = p->LeftChild;
+            }
+
+            //Tag the pB.
+            p->data = c;
+            p->LeftChild = p->RightChild = NULL;
+
+            //Push in.
+            BiStack.push(p);
+
+            IsRight = false;
+            break;
+        }
     }
+
+    return;
 }
 
 enum Type

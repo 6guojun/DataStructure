@@ -1,4 +1,5 @@
 #include "BinaryTree.h"
+#include "Extention.h"
 
 int main()
 {
@@ -8,8 +9,11 @@ int main()
     //Pre order:ABDECFGH
     //In order:DEBAGFCH
     //Post order:EDBGFHCA
+
+    /*
     cout << "Input ebt:" << endl;
-    CreatBiTree_Rec(root);
+    //CreatBiTree_Rec(root);
+    CreatBiTree_Loop(root);
 
     cout << "Pre order:" << endl;
     DisplayBiTree_Stack(root, Pre);
@@ -25,6 +29,15 @@ int main()
 
     cout << "Post order:" << endl;
     DisplayBiTree_Stack(root, Post);
+    cout << endl;
+    DisplayBiTree(root, Post);
+    cout << endl;
+*/
+    UnionPreIn("ABDECFGH", "DEBAGFCH", root);
+    cout << endl;
+    DisplayBiTree(root, Pre);
+    cout << endl;
+    DisplayBiTree(root, In);
     cout << endl;
     DisplayBiTree(root, Post);
     cout << endl;
