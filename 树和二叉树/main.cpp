@@ -10,7 +10,6 @@ int main()
     //In order:DEBAGFCH
     //Post order:EDBGFHCA
 
-    /*
     cout << "Input ebt:" << endl;
     //CreatBiTree_Rec(root);
     CreatBiTree_Loop(root);
@@ -32,7 +31,7 @@ int main()
     cout << endl;
     DisplayBiTree(root, Post);
     cout << endl;
-*/
+
     UnionPreIn("ABDECFGH", "DEBAGFCH", root);
     cout << endl;
     DisplayBiTree(root, Pre);
