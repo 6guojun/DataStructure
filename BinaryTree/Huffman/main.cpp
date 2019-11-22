@@ -17,5 +17,6 @@ int main()
     cout << "Huffman Code:" << endl;
     DisplayHuffmanCode(HC);
 
+    system("pause");
     return 0;
 }
