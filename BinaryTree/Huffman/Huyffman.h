@@ -1,5 +1,10 @@
+#pragma once
+
 #include <iostream>
 #include <stack>
+#include <fstream>
+#include "fSiletream.h"
+#include "Tools.h"
 
 using namespace std;
 
@@ -176,4 +181,102 @@ void DisplayHuffmanCode(HuffmanCode HC)
     {
         cout << HC.Coding[i].Character << '\t' << HC.Coding[i].Code << endl;
     }
+}
+void HuffmanEncoder(HuffmanTree &HT, HuffmanCode &HC, string FileName, string OutPutFile)
+{
+    int *ByteWeight; //The raw weight.
+    int *Weight;     //The real weight.
+    char *Character; //The real character.
+    int CharNum = 0; //The total char num.
+
+    //Read the file & Get the Weight.
+    ReadFileWeight(FileName, ByteWeight);
+    CharNum = CompressWeightTable(ByteWeight, Weight, Character);
+
+    CreateHuffmanTree(HT, HC, Weight, Character, CharNum);
+    /*
+    cout << endl;
+    cout << "Huffman Tree:" << endl;
+    DisplayHuffmanTree(HT);
+    cout << endl;
+    cout << "Huffman Code:" << endl;
+    DisplayHuffmanCode(HC);
+    */
+
+    //Creat a heap of weight table.
+    Weight = new int[ByteSize];
+    for (int i = 0; i < ByteSize; i++)
+    {
+        Weight[i] = 0;
+    }
+
+    //Creat a file stream object & OPen the file.
+    ifstream ifs;
+    ifs.open(FileName, ios::in);
+    ofstream ofs;
+    ofs.open(OutPutFile, ios::trunc);
+
+    //Logic judge.
+    if (!ifs.is_open())
+    {
+        cout << "File open failed.(Please check it is exist?)" << endl;
+        return;
+    }
+
+    //Creat the weight table.
+    char c;
+    while ((c = ifs.get()) != EOF)
+    {
+        for (int i = 0; i < HC.num; i++)
+        {
+            if (HC.Coding[i].Character == c)
+            {
+                //cout << HC.Coding[i].Code << endl;
+                ofs << HC.Coding[i].Code;
+                break;
+            }
+        }
+    }
+
+    //Close the file stream.
+    ifs.close();
+    ofs.close();
+}
+void HuffmanDecoder(HuffmanTree HT, HuffmanCode HC, string FileName, string OutPutFile)
+{
+    //Creat a file stream object & OPen the file.
+    ifstream ifs;
+    ifs.open(FileName, ios::in);
+    ofstream ofs;
+    ofs.open(OutPutFile, ios::trunc);
+
+    //Logic judge.
+    if (!ifs.is_open())
+    {
+        cout << "File open failed.(Please check it is exist?)" << endl;
+        return;
+    }
+
+    //Creat the weight table.
+    char c;
+    int ptr = HT.num-1;
+    while ((c = ifs.get()) != EOF)
+    {
+        cout << c<<endl;
+        if (HT.Elem[ptr].leftChild == -1)
+        {
+            ofs << HC.Coding[ptr].Character;
+            ptr = HT.num-1;
+        }
+        if (c == '0')
+        {
+            ptr = HT.Elem[ptr].leftChild;
+            continue;
+        }
+        ptr = HT.Elem[ptr].rightChild;
+    }
+
+    //Close the file stream.
+    ifs.close();
+    ofs.close();
 }

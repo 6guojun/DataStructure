@@ -1,22 +1,29 @@
 #include "Huyffman.h"
+#include "fSiletream.h"
 
-int main()
+HuffmanTree HT;
+HuffmanCode HC;
+
+int main(int argc, char *argv[])
 {
-    HuffmanTree HT;
-    HuffmanCode HC;
-    int WEIGHT[ByteSize] = {5, 29, 7, 8, 14, 23, 3, 11};
-    char CHARACTER[ByteSize] = {65, 66, 67, 68, 69, 70, 71, 72};
-    int NUM = 8;
-    CreateHuffmanTree(HT, HC, WEIGHT, CHARACTER, NUM);
-    //cout << HT.Elem[HT.num - 1].weight;
-    cout << "Huffman Tree:" << endl;
-    DisplayHuffmanTree(HT);
+    string FileName = "C:\\Users\\EasternDay\\Desktop\\test.txt";
+    //Logic judge.
+    /*
+    if (argc == 1)
+    {
+        return 0;
+    }
+    */
 
-    cout << endl;
+    //Get the file.
+    for (int i = 1; i < argc; i++)
+    {
+        cout << "Input" << argv[i] << endl;
+        FileName = argv[i];
+    }
 
-    cout << "Huffman Code:" << endl;
-    DisplayHuffmanCode(HC);
+    HuffmanEncoder(HT, HC, FileName, "C:\\Users\\EasternDay\\Desktop\\123.txt");
+    HuffmanDecoder(HT, HC, "C:\\Users\\EasternDay\\Desktop\\123.txt", "C:\\Users\\EasternDay\\Desktop\\1235.txt");
 
-    system("pause");
     return 0;
 }
