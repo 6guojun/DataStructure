@@ -1,0 +1,7 @@
+#include "AdjacencyMatrix.h"
+
+int main()
+{
+
+    return 0;
+}
