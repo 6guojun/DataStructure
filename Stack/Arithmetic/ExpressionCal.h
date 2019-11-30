@@ -27,8 +27,8 @@ bool IsDigital(char c, bool IsHEX = false)
 {
     return ((c >= '0' && c <= '9') ||
             (IsHEX &&
-             ((c >= 'a' && c <= 'e') ||
-              (c >= 'A' && c <= 'E'))));
+             ((c >= 'a' && c <= 'f') ||
+              (c >= 'A' && c <= 'F'))));
 }
 bool IsPoint(char c)
 {
@@ -117,7 +117,12 @@ double GetDigital(string str, int &pla)
             multiple *= 10;
         }
 
-        int CurNum = IsDigital(c) ? c - '0' : (c >= 'a' && c <= 'e') ? c - 'a' + 10 : c - 'A' + 10;
+        //TODO
+        int CurNum = IsDigital(c) ? c - '0' : (c >= 'a' && c <= 'f') ? c - 'a' + 10 : (c >= 'A' && c <= 'F') ? c - 'A' + 10 : -1;
+        if (CurNum == -1)
+        {
+            cout << "Input illegal." << endl;
+        }
         if (CurNum >= base)
         {
             cout << "Num is not in base " << base << endl;
@@ -148,6 +153,11 @@ double Cal(double pre, char o, double las)
     case '*':
         return pre * las;
     case '/':
+        if (las == 0)
+        {
+            cout << "Do not use 0 in this expression!";
+            exit(0);
+        }
         return pre / las;
     case '%':
         return (double((int)pre % (int)las));
@@ -175,14 +185,6 @@ Status CalExpression(string str)
     for (int i = 0; str[i] != '\0'; i++)
     {
         char c = str[i];
-
-        //如果为操作数
-        if (IsDigital(c))
-        {
-            Push(DigStack, GetDigital(str, i));
-            cout << "Digital:\t" << DigStack.Stack[DigStack.Top - 1] << endl;
-            continue;
-        }
 
         //如果为运算符
         if (IsOperator(c))
@@ -232,6 +234,18 @@ Status CalExpression(string str)
                 cout << "\tCal:\t\t" << Cal(PreDig, CalOp.Operator, OprDig) << endl;
                 i--;
             }
+        }
+        //如果为操作数
+        else if (IsDigital(c) || c == '.')
+        {
+            Push(DigStack, GetDigital(str, i));
+            cout << "Digital:\t" << DigStack.Stack[DigStack.Top - 1] << endl;
+            continue;
+        }
+        else
+        {
+            cout << "Illegal expression." << endl;
+            exit(0);
         }
     }
 

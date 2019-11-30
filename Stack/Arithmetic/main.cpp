@@ -13,9 +13,13 @@
  * 如果有那里错误了，还请老师指正。
 */
 
+//3/0
+
 int main()
 {
     //CalExpression("((0x17*0.0023e3)/23-1.8)^2+1");
-    CalExpression("1E07");
+    string s;
+    cin >> s;
+    CalExpression(s);
     return 0;
 }
