@@ -19,6 +19,7 @@ int main()
     CreateMGraph(G); //初始化
     PrintfMGraph(G); //打印
 
-    DFSTraveser(G);
+    DFSTraveser(G, 0); //DFS搜索
+    BFSTraveser(G);
     return 0;
 }

@@ -1,5 +1,7 @@
 #pragma once
 #include <iostream>
+#include <stack>
+#include <queue>
 using namespace std;
 
 #define MAXVERTEX 100                             //图的最大顶点数
@@ -8,6 +10,12 @@ using namespace std;
 typedef char vertextype; //定义定点的存储信息为字符型
 typedef int arctype;     //定义边的权值为int型
 
+enum GraphType
+{
+    Graph,
+    Diagraph
+};
+
 //图的邻接矩阵的存储结构
 typedef struct
 {
@@ -15,6 +23,7 @@ typedef struct
     arctype Arc[MAXVERTEX][MAXVERTEX]; //邻接矩阵
     int Vertexnum;                     //图的当前顶点数
     int Arcnum;                        //图的当前边数
+    GraphType GT;                      //图类别
 } MGraph;
 
 //创建无向网
@@ -36,6 +45,11 @@ void CreateMGraph(MGraph &G)
         exit(0);
     }
 
+    cout << "输入图类别（0-无向图，1有向图）:" << endl;
+    bool IsDiagraph;
+    cin >> IsDiagraph;
+    G.GT = IsDiagraph ? Diagraph : Graph;
+
     G.Arcnum = 0;
 
     //输入顶点信息
@@ -55,7 +69,7 @@ void CreateMGraph(MGraph &G)
     }
 
     cout << "输入边信息：" << endl;
-    cout << "起始点 结束点 权值" << endl;
+    cout << "@ 起始点 结束点 权值 (#结束)" << endl;
     //连接边
     char flag;
     int i, j, w;
@@ -68,7 +82,12 @@ void CreateMGraph(MGraph &G)
         }
         cin >> i >> j >> w;
         G.Arc[i][j] = w; //赋权
-        G.Arcnum++;      //边数增加
+        //无向图
+        if (G.GT == Graph)
+        {
+            G.Arc[j][i] = w; //赋权
+        }
+        G.Arcnum++; //边数增加
     }
 }
 
@@ -92,7 +111,6 @@ void PrintfMGraph(MGraph G)
             }
             else
             {
-
                 cout << G.Arc[i][j] << '\t';
             }
         }
@@ -114,16 +132,74 @@ void DFS_Rec(MGraph G, int i, bool *Visited)
     }
 }
 
-//深度遍历最小生成树
-void DFSTraveser(MGraph G)
+//深度搜索（非递归）
+void DFS(MGraph G, int v, bool *Visited)
+{
+    stack<int> Routes;
+    Routes.push(v);
+    Visited[v] = true;
+    cout << G.Vertex[v];
+    while (!Routes.empty())
+    {
+        int i = Routes.top(), j;
+        for (j = 0; j < G.Vertexnum; j++)
+        {
+            if (G.Arc[i][j] != INFINITY && !Visited[j])
+            {
+                Routes.push(j);
+                Visited[j] = true;
+                cout << G.Vertex[j];
+                break;
+            }
+        }
+        if (j == G.Vertexnum)
+        {
+            Routes.pop();
+        }
+    }
+}
+
+//深度遍历最小生成树(0-非遍历，1-遍历)
+void DFSTraveser(MGraph G, int Type)
 {
     bool *Visited = new bool[G.Vertexnum];
     for (int i = 0; i < G.Vertexnum; i++)
     {
         if (!Visited[i])
         {
-            DFS_Rec(G, i, Visited);
+            Type ? DFS(G, i, Visited) : DFS_Rec(G, i, Visited);
             cout << endl;
+        }
+    }
+}
+
+//广度搜索
+void BFSTraveser(MGraph G)
+{
+    queue<int> Routes;
+    bool *Visited = new bool[G.Vertexnum];
+    for (int v = 0; v < G.Vertexnum; v++)
+    {
+        if (!Visited[v])
+        {
+            cout << endl;
+            Routes.push(v);
+            cout << G.Vertex[v];
+            Visited[v] = true;
+        }
+        while (!Routes.empty())
+        {
+            int i = Routes.front(), j;
+            for (j = 0; j < G.Vertexnum; j++)
+            {
+                if (G.Arc[i][j] != INFINITY && !Visited[j])
+                {
+                    Routes.push(j);
+                    Visited[j] = true;
+                    cout << G.Vertex[j];
+                }
+            }
+            Routes.pop();
         }
     }
 }
