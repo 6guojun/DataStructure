@@ -11,5 +11,5 @@ using namespace std;
 
 //如果只有英文，则ByteSize为128
 //而中文的ASCII码为复数，因此范围扩大一倍，为256
-#define ByteSize 512
+#define ByteSize 256
 #define MAXSIZE ByteSize * 2
